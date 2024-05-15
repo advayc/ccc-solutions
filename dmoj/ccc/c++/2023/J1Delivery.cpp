@@ -1,10 +1,14 @@
-P = int(input()) #packages dev
-C = int(input()) #collision 
-
-if P > C:
-    F = (50*P) - (10*C) + 500
-
-else:
-    F = (50*P) - (10*C)
-
-print(F)
+#include <iostream>
+uisng namespace std;
+int main() {
+    int p,c,f;
+    ::cin >> p;
+    ::cin >> c;
+    if (p > c){
+        f = (50*P) - (10*C) + 500
+    }else {
+        f = (50*P) - (10*C)
+    }
+    ::cout << f;
+    return 0;
+}
