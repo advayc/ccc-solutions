@@ -26,3 +26,4 @@ for row in range(m):
                 grid[row][col] = 'B'
 
 print(ans)
+
