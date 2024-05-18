@@ -1,24 +1,28 @@
-m = int(input()) # rows
-n = int(input()) # cols
-k = int(input())
-grid = [['B' for _ in range(n)] for _ in range(m)]
+import sys
+# faster plz
+m = int(sys.stdin.readline())  # rows
+n = int(sys.stdin.readline())  # cols
+k = int(sys.stdin.readline())
 ans=0
-for i in range(k):
-    direction,pos = map(str, input().split())
-    pos=int(pos)-1 # indexing
-    if direction == 'C':
-        for ro in range(m):
-            if grid[ro][pos] == 'B':
-                grid[ro][pos]='G' # replace
-            elif grid[ro][pos] == 'G':
-                grid[ro][pos]='B' # replace
-    elif direction == 'R':
-        for col in range(n):
-            if grid[pos][col] == 'B':
-                grid[pos][col] = 'G' # replace
-            elif grid[pos][col] == 'G':
-                grid[pos][col] = 'B' # replace
+grid = [['B' for _ in range(n)] for _ in range(m)]
+row_changes = [0] * m
+col_changes = [0] * n
 
-for each in (grid):
-    ans += each.count('G')
+for i in range(k):
+    direction, pos = sys.stdin.readline().split()
+    pos = int(pos) - 1  # indexing
+    if direction == 'C':
+        col_changes[pos] += 1
+    elif direction == 'R':
+        row_changes[pos] += 1
+
+for row in range(m):
+    for col in range(n):
+        if (row_changes[row] + col_changes[col]) % 2 == 1:
+            if grid[row][col] == 'B':
+                grid[row][col] = 'G'
+                ans += 1
+            else:
+                grid[row][col] = 'B'
+
 print(ans)
