@@ -26,3 +26,4 @@ if sums_col[0] == sums_col[1] and sums_col[1] == sums_col[2] and sums_col[2] == 
    print("magic")
 else:
     print("not magic")
+    
