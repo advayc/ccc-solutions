@@ -1,5 +1,6 @@
 import sys
-
+input=sys.stdin.readline
+sys.setrecursionlimit(10000)
 rows = int(input())
 cols = int(input())
 grid = [list(input()) for i in range(rows)]
