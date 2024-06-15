@@ -1,6 +1,7 @@
 # competitive-programming
-algorithms, dmoj, codeforces, leetcode 
-in python and c++ with code explanations  
+algorithms, dmoj, codeforces, leetcode Solutions in python and c++ with code explanations  
+
+
 
 [DMOJ](https://dmoj.ca/user/advayc)
 [Codeforces](https://codeforces.com/profile/advayc)
