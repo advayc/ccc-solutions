@@ -4,5 +4,6 @@ while w != 'X':
 		w = w.replace('ANA','A')
 		w = w.replace('BAS','A')
 
-	print('YES' if w == 'A' else 'NO')
+	if w=='A':print('YES')
+	else: print('NO')
 	w = input()

@@ -11,7 +11,7 @@ for i in range(trees): # add tree to n * n yard
     c,r = map(int, input().split())
     yard[c-1][r-1] = 1
 
-
 for x in range(n):
     print(yard[x])
+print(yard)
 # finish later 
