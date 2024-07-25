@@ -1,5 +1,4 @@
 import time
-start_time = time.time()
 
 def fib_top_down(n, memo={}):
     if n in memo:
@@ -10,6 +9,7 @@ def fib_top_down(n, memo={}):
     return memo[n]
 
 N = int(input())
+start_time = time.time()
 result = fib_top_down(N)
 end_time = time.time()
 execution_time = end_time - start_time
