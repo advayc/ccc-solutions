@@ -4,7 +4,7 @@
 # -> visit first at the same layer then move on to the next layer
 # add nodes to queue, pop nodes off the queue and add to visited
 # we do this by defining a variable to whatever is being popped from the queue(0)
-
+import time
 graph = {
     'A': ['B', 'C'],
     'B': ['D', 'E'],
@@ -28,5 +28,9 @@ def bfs(graph, starting_node):
                 visited.add(neighbour)
                 queue.append(neighbour)
 
+start_time = time.time()
 bfs(graph, 'A')
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time: {execution_time} seconds")
 # run the bfs function starting at our node A
