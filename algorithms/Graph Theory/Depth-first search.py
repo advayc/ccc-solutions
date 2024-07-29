@@ -20,7 +20,7 @@ def iterative_dfs(graph, starting_node):
     while stack: # while the stack is full
         s = stack.pop()
         print(s)
-        for neighbour in (graph[s]):
+        for neighbour in graph[s]:
             if neighbour not in visited:
                 visited.add(neighbour)
                 stack.append(neighbour)

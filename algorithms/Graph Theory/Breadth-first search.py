@@ -14,7 +14,7 @@ graph = {
     'F': []
 }
 
-def bfs(graph, starting_node):
+def graph_bfs(graph, starting_node): # this is a BFS with a GRAPH - > implmented using a dictonary to show vertices and edges
     visited = set()
     queue = []
     queue.append(starting_node) # add starting node into the queue
@@ -29,8 +29,38 @@ def bfs(graph, starting_node):
                 queue.append(neighbour)
 
 start_time = time.time()
-bfs(graph, 'A')
+graph_bfs(graph, 'A')
 end_time = time.time()
 execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+print(f"Execution time for Graph BFS: {execution_time} seconds \n---------------\n")
+
+dlist = [
+    ['A', 'B', 'C'],
+    ['D', 'E', 'F']
+]
+
+def list_bfs(dlist, startx,starty):
+    directions = [(0,1),(0,-1),(-1,0),(1,0)] # directions up down left right  
+    rows = len(dlist)
+    cols = len(dlist[0])
+    visited = set()
+    queue = []
+    queue.append((startx, starty))
+    visited.add((startx,starty))
+
+    while queue: # loop till the queue is empty
+        x,y = queue.pop(0)
+        print(dlist[x][y])
+        for dx,dy in directions:
+            newx = x+dx
+            newy = y+dy
+            if 0 <= newx <= rows and 0 <= newy <= cols and (newx,newy) not in visited:
+                queue.append((newx,newy))
+                visited.add((newx,newy))
+
+start_time = time.time()
+list_bfs(dlist, 0,0) # run the list bfs functon s
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time for 2D list BFS: {execution_time} seconds")
 # run the bfs function starting at our node A
