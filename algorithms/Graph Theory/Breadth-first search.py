@@ -54,7 +54,7 @@ def list_bfs(dlist, startx,starty):
         for dx,dy in directions:
             newx = x+dx
             newy = y+dy
-            if 0 <= newx <= rows and 0 <= newy <= cols and (newx,newy) not in visited:
+            if 0 <= newx < rows and 0 <= newy < cols and (newx,newy) not in visited:
                 queue.append((newx,newy))
                 visited.add((newx,newy))
 
