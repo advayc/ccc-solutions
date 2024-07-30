@@ -58,6 +58,7 @@ def list_bfs(dlist, startx,starty):
                 queue.append((newx,newy))
                 visited.add((newx,newy))
 
+
 start_time = time.time()
 list_bfs(dlist, 0,0) # run the list bfs functon s
 end_time = time.time()
