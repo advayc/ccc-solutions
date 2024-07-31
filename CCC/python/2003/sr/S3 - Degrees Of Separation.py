@@ -26,7 +26,7 @@ def bfs(graph, starting_node, ending_node):
     count = 0
     visited = set()
     queue = []
-    queue.append((starting_node, [])) # with add every traversed node into the queue
+    queue.append((starting_node, [])) # with add every unique traversed node into the queue
     visited.add(starting_node)
     while queue:
         current_node,count = queue.pop(0)
