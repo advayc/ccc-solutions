@@ -2,6 +2,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.animation as animation
+from matplotlib import pylab
+
+# to use this code you need to import the function from graph_representation.visualize , like this
+# from graph_representation.visualize import showgraph, showpath
+# then you would be able to use showgraph or showpath anywhere in your code
 
 def showgraph(graph):
     G = nx.DiGraph()
@@ -53,6 +58,8 @@ def showpath(graph, path):
     node_size_list = [node_sizes[node] for node in G.nodes()]
 
     fig, ax = plt.subplots(figsize=(8, 6))
+    fig = pylab.gcf()
+    fig.canvas.manager.set_window_title('Visualize The Shortest Path in a Unweighted Graph')
 
     # Draw nodes
     nx.draw_networkx_nodes(G, pos, node_color=node_color_list, node_size=node_size_list, **options, ax=ax)
