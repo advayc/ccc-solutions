@@ -35,24 +35,75 @@ def showpath(graph, path):
         for neighbor in graph[node]:
             G.add_edge(node, neighbor)
 
-    # Define node colors
-    node_colors = {node: 'tab:blue' for node in G.nodes()}
-    node_colors[path[0]] = 'tab:yellow'  # Starting node
-    node_colors[path[-1]] = 'tab:blue'  # Ending node
+    # Define node colors and sizes
+    node_colors = {node: '#1f77b4' for node in G.nodes()}  # Default color for nodes
+    node_sizes = {node: 800 for node in G.nodes()}
+    starting_node = path[0]
+    ending_node = path[-1]
+    node_colors[starting_node] = '#007300'  # Starting node color (green)
+    node_colors[ending_node] = '#ff7f0e'  # Ending node color (orange)
+    node_sizes[starting_node] = 1000  # Increase size for starting node
+    node_sizes[ending_node] = 1000  # Increase size for ending node
 
     pos = nx.spring_layout(G, seed=3113794652)  # positions for all nodes
 
-    options = {"edgecolors": "tab:gray", "node_size": 800, "alpha": 0.9}
-    node_color_list = [mcolors.CSS4_COLORS.get(node_colors[node], 'tab:blue') for node in G.nodes()]
-    nx.draw_networkx_nodes(G, pos, node_color=node_color_list, **options)
+    options = {"edgecolors": "#333333", "alpha": 0.9}
+    node_color_list = [node_colors[node] for node in G.nodes()]
+    node_size_list = [node_sizes[node] for node in G.nodes()]
+    
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # Draw nodes
+    nx.draw_networkx_nodes(G, pos, node_color=node_color_list, node_size=node_size_list, **options, ax=ax)
 
     # Highlight the path edges
     path_edges = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
-    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
-    nx.draw_networkx_edges(G, pos, edgelist=path_edges, width=2, alpha=0.7, edge_color="tab:red")
+    nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5, ax=ax)
+    nx.draw_networkx_edges(G, pos, edgelist=path_edges, width=2, alpha=0.7, edge_color="#ff3333", ax=ax)
 
-    nx.draw_networkx_labels(G, pos, font_size=12, font_family='sans-serif', font_color="whitesmoke")
+    # Draw labels
+    nx.draw_networkx_labels(G, pos, font_size=12, font_family='sans-serif', font_color="whitesmoke", ax=ax)
 
     plt.title('Graph Visualization with Highlighted Path')
     plt.axis('off')
+
+    # Hover and Click Event Handling
+    def on_hover(event):
+        if event.inaxes == ax:
+            cont, ind = scatter.contains(event)
+            if cont:
+                # Get the index of the hovered node
+                index = ind['ind'][0]
+                node = list(G.nodes())[index]
+                # Update the title to show the node
+                ax.set_title(f'Hovered over node: {node}')
+                fig.canvas.draw_idle()
+            else:
+                ax.set_title('Graph Visualization with Highlighted Path')
+                fig.canvas.draw_idle()
+
+    def on_click(event):
+        if event.inaxes == ax:
+            cont, ind = scatter.contains(event)
+            if cont:
+                # Get the index of the clicked node
+                index = ind['ind'][0]
+                node = list(G.nodes())[index]
+                # Update the title to show the node
+                ax.set_title(f'Clicked on node: {node}')
+                fig.canvas.draw_idle()
+
+    # Create a scatter plot for hover and click detection
+    scatter = ax.scatter(
+        [pos[node][0] for node in G.nodes()],
+        [pos[node][1] for node in G.nodes()],
+        s=[node_sizes[node] for node in G.nodes()],
+        c=[node_colors[node] for node in G.nodes()],
+        edgecolors=options["edgecolors"],
+        alpha=options["alpha"]
+    )
+
+    fig.canvas.mpl_connect('motion_notify_event', on_hover)
+    fig.canvas.mpl_connect('button_press_event', on_click)
+
     plt.show()
