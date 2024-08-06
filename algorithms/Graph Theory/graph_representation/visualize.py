@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import matplotlib.animation as animation
 
 def showgraph(graph):
     G = nx.DiGraph()
@@ -50,7 +51,7 @@ def showpath(graph, path):
     options = {"edgecolors": "#333333", "alpha": 0.9}
     node_color_list = [node_colors[node] for node in G.nodes()]
     node_size_list = [node_sizes[node] for node in G.nodes()]
-    
+
     fig, ax = plt.subplots(figsize=(8, 6))
 
     # Draw nodes
@@ -75,22 +76,15 @@ def showpath(graph, path):
                 # Get the index of the hovered node
                 index = ind['ind'][0]
                 node = list(G.nodes())[index]
-                # Update the title to show the node
-                ax.set_title(f'Hovered over node: {node}')
+                if node == starting_node:
+                    ax.set_title('Hovering over the starting node')
+                elif node == ending_node:
+                    ax.set_title('Hovering over the ending node')
+                else:
+                    ax.set_title(f'Hovered over node: {node}')
                 fig.canvas.draw_idle()
             else:
                 ax.set_title('Graph Visualization with Highlighted Path')
-                fig.canvas.draw_idle()
-
-    def on_click(event):
-        if event.inaxes == ax:
-            cont, ind = scatter.contains(event)
-            if cont:
-                # Get the index of the clicked node
-                index = ind['ind'][0]
-                node = list(G.nodes())[index]
-                # Update the title to show the node
-                ax.set_title(f'Clicked on node: {node}')
                 fig.canvas.draw_idle()
 
     # Create a scatter plot for hover and click detection
@@ -104,6 +98,17 @@ def showpath(graph, path):
     )
 
     fig.canvas.mpl_connect('motion_notify_event', on_hover)
-    fig.canvas.mpl_connect('button_press_event', on_click)
+
+    # Create animation to showcase the path
+    def update(num):
+        ax.clear()
+        nx.draw_networkx_nodes(G, pos, node_color=node_color_list, node_size=node_size_list, **options, ax=ax)
+        nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5, ax=ax)
+        nx.draw_networkx_edges(G, pos, edgelist=path_edges[:num+1], width=2, alpha=0.7, edge_color="#ff3333", ax=ax)
+        nx.draw_networkx_labels(G, pos, font_size=12, font_family='sans-serif', font_color="whitesmoke", ax=ax)
+        plt.title('Graph Visualization with Highlighted Path')
+        plt.axis('off')
+
+    ani = animation.FuncAnimation(fig, update, frames=len(path_edges)+1, repeat=False, interval=500)  # Adjust interval for smoothness
 
     plt.show()
