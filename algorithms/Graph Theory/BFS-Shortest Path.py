@@ -1,4 +1,5 @@
 import time
+from graph_representation.visualize import showgraph, showpath
 
 graph = {
     'A': ['B', 'C', 'D'],
@@ -40,3 +41,4 @@ end_time = time.time()
 execution_time = end_time - start_time
 print(f"Execution time for Graph BFS: {execution_time} seconds \n---------------\n")
 print(f"Shortest path from 'A' to 'P': \n{shortest_path[0]}")
+showpath(graph, shortest_path[1])
