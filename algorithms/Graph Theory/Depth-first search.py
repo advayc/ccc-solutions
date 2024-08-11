@@ -26,11 +26,23 @@ def iterative_dfs(graph, starting_node):
                 stack.append(neighbour)
 
 # this here is a iterative approach - > this is O(V*E) -> vertices * edges 
-
+def recursive_dfs(graph, node, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(node)
+    print(node)
+    for neighbour in graph[node]:
+        if neighbour not in visited:
+            recursive_dfs(graph, neighbour, visited)
 
 start_time = time.time()
 iterative_dfs(graph, 'A')
 end_time = time.time()
 execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+print(f"Execution time: {execution_time} seconds \n ------------------------")
     
+start_time = time.time()
+recursive_dfs(graph, 'A')
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time: {execution_time} seconds")
