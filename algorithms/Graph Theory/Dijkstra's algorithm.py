@@ -1,4 +1,4 @@
-import heapq
+import heapq, time
 from graph_representation.visualize import showweightedpath
 
 def heap_dijkstra(graph, start):
@@ -95,23 +95,44 @@ def reconstruct_path(predecessors, start, end):
 
 # Example usage:
 graph = {
-    'A': [(1, 'B'), (4, 'C')],
-    'B': [(1, 'A'), (2, 'C'), (6, 'D')],
-    'C': [(4, 'A'), (2, 'B'), (3, 'D')],
-    'D': [(6, 'B'), (3, 'C')]
+    'A': [(1, 'B'), (4, 'C'), (7, 'E')],
+    'B': [(1, 'A'), (2, 'C'), (6, 'D'), (3, 'F')],
+    'C': [(4, 'A'), (2, 'B'), (3, 'D'), (8, 'G')],
+    'D': [(6, 'B'), (3, 'C'), (5, 'H'), (7, 'F')],
+    'E': [(7, 'A'), (3, 'F'), (2, 'I')],
+    'F': [(3, 'B'), (7, 'D'), (3, 'E'), (2, 'G'), (1, 'J')],
+    'G': [(8, 'C'), (2, 'F'), (4, 'H'), (5, 'K')],
+    'H': [(5, 'D'), (4, 'G'), (6, 'L')],
+    'I': [(2, 'E'), (4, 'J'), (6, 'M')],
+    'J': [(1, 'F'), (4, 'I'), (5, 'K'), (3, 'N')],
+    'K': [(5, 'G'), (5, 'J'), (2, 'L'), (7, 'O')],
+    'L': [(6, 'H'), (2, 'K'), (8, 'P')],
+    'M': [(6, 'I'), (3, 'N')],
+    'N': [(3, 'J'), (3, 'M'), (4, 'O')],
+    'O': [(7, 'K'), (4, 'N'), (6, 'P')],
+    'P': [(8, 'L'), (6, 'O')]
 }
 
 start_node = 'A'
 end_node = 'D'
 
 # Dijkstra without heap
+start_time = time.time()
 distances_no_heap, predecessors_no_heap = dijkstra_no_heap(graph, start_node)
 path_no_heap = reconstruct_path(predecessors_no_heap, start_node, end_node)
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time for Dijkstra without heap: {execution_time} seconds \n---------------\n")
 print("Path (no heap):", path_no_heap)
-showweightedpath(graph, path_no_heap)
+
 
 # Dijkstra with heap
+start_time = time.time()
 distances_with_heap, predecessors_with_heap = heap_dijkstra(graph, start_node)
 path_with_heap = reconstruct_path(predecessors_with_heap, start_node, end_node)
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time for Dijkstra with heap: {execution_time} seconds \n---------------\n")
 print("Path (with heap):", path_with_heap)
-showweightedpath(graph, path_with_heap)
+
+showweightedpath(graph, path_no_heap)
