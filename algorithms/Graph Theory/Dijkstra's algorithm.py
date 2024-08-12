@@ -1,51 +1,36 @@
 import heapq
+from graph_representation.visualize import showweightedpath
 
 def heap_dijkstra(graph, start):
     """
     Implements Dijkstra's algorithm to find the shortest path from the start node to all other nodes in a weighted graph.
     
     Parameters:
-    - graph (list of lists of tuples): Adjacency matrix where each element graph[u][v] is a tuple (weight, destination).
-    - start (int): The starting node for the algorithm.
+    - graph (dict): Adjacency list where each key is a node, and the value is a list of tuples (weight, destination).
+    - start (str): The starting node for the algorithm.
 
     Returns:
-    - dist (list): The shortest distance from the start node to each node.
-    - prev (list): The previous node in the optimal path from the start node for each node.
+    - dist (dict): The shortest distance from the start node to each node.
+    - prev (dict): The previous node in the optimal path from the start node for each node.
     """
 
-    # Number of nodes in the graph
-    num_nodes = len(graph)
-    
-    # Distance table initialized to infinity for all nodes except the start node
-    dist = [float('inf')] * num_nodes
+    dist = {node: float('inf') for node in graph}
     dist[start] = 0
-    
-    # Previous node table to reconstruct the shortest path
-    prev = [None] * num_nodes
-    
-    # Priority queue to select the node with the smallest distance; initialized with the start node
+    prev = {node: None for node in graph}
     priority_queue = [(0, start)]  # (distance, node)
-    
-    # Set of visited nodes to avoid processing a node more than once
     visited = set()
     
     while priority_queue:
-        # Get the node with the smallest distance
         current_dist, u = heapq.heappop(priority_queue)
         
-        # If this node has already been visited, skip it
         if u in visited:
             continue
         
-        # Mark this node as visited
         visited.add(u)
         
-        # Iterate over neighboring nodes
         for weight, v in graph[u]:
-            # Calculate the new distance to the neighboring node
             distance = current_dist + weight
             
-            # If the new distance is smaller, update it and push to priority queue
             if distance < dist[v]:
                 dist[v] = distance
                 prev[v] = u
@@ -59,63 +44,74 @@ def dijkstra_no_heap(graph, start):
     using a simple list to track the minimum distance instead of a priority queue.
 
     Parameters:
-    - graph (list of lists of tuples): Adjacency matrix where each element graph[u][v] is a tuple (weight, destination).
-    - start (int): The starting node for the algorithm.
+    - graph (dict): Adjacency list where each key is a node, and the value is a list of tuples (weight, destination).
+    - start (str): The starting node for the algorithm.
 
     Returns:
-    - dist (list): The shortest distance from the start node to each node.
-    - prev (list): The previous node in the optimal path from the start node for each node.
+    - dist (dict): The shortest distance from the start node to each node.
+    - prev (dict): The previous node in the optimal path from the start node for each node.
     """
 
-    # Number of nodes in the graph
-    num_nodes = len(graph)
-    
-    # Distance table initialized to infinity for all nodes except the start node
-    dist = [float('inf')] * num_nodes
+    dist = {node: float('inf') for node in graph}
     dist[start] = 0
-    
-    # Previous node table to reconstruct the shortest path
-    prev = [None] * num_nodes
-    
-    # List of nodes to be processed
-    unvisited = list(range(num_nodes))
+    prev = {node: None for node in graph}
+    unvisited = list(graph.keys())
     
     while unvisited:
-        # Find the node with the smallest distance in the unvisited list
         u = min(unvisited, key=lambda node: dist[node])
-        
-        # Remove the node from the unvisited list
         unvisited.remove(u)
         
-        # Iterate over neighboring nodes
         for weight, v in graph[u]:
-            # Calculate the new distance to the neighboring node
             distance = dist[u] + weight
             
-            # If the new distance is smaller, update it and set the previous node
             if distance < dist[v]:
                 dist[v] = distance
                 prev[v] = u
     
     return dist, prev
 
+def reconstruct_path(predecessors, start, end):
+    """
+    Reconstruct the path from the start node to the end node using the predecessors list.
+    
+    Parameters:
+    - predecessors (dict): The dictionary of predecessors from Dijkstra's algorithm.
+    - start (str): The starting node.
+    - end (str): The ending node.
+    
+    Returns:
+    - path (list): The path from start to end.
+    """
+    path = []
+    current = end
+    while current is not None:
+        path.insert(0, current)
+        current = predecessors[current]
+    
+    if path[0] == start:
+        return path
+    else:
+        return []  # No path found
+
 # Example usage:
-# Graph representation as an adjacency matrix:
-# graph[u] = [(weight, v), (weight, w), ...] where 'weight' is the weight of the edge from node 'u' to node 'v'
-graph = [
-    [(1, 1), (4, 2)],
-    [(1, 0), (2, 2), (6, 3)],
-    [(4, 0), (2, 1), (3, 3)],
-    [(6, 1), (3, 2)]
-]
+graph = {
+    'A': [(1, 'B'), (4, 'C')],
+    'B': [(1, 'A'), (2, 'C'), (6, 'D')],
+    'C': [(4, 'A'), (2, 'B'), (3, 'D')],
+    'D': [(6, 'B'), (3, 'C')]
+}
 
-start_node = 0
-distances, predecessors = dijkstra_no_heap(graph, start_node)
+start_node = 'A'
+end_node = 'D'
 
-print("Distances from start node:", distances)
-print("Predecessors in the shortest path:", predecessors)
-print('-'*20)
-distances, predecessors = heap_dijkstra(graph, start_node)
+# Dijkstra without heap
+distances_no_heap, predecessors_no_heap = dijkstra_no_heap(graph, start_node)
+path_no_heap = reconstruct_path(predecessors_no_heap, start_node, end_node)
+print("Path (no heap):", path_no_heap)
+showweightedpath(graph, path_no_heap)
 
-print("Distances from start node:", distances)
-print("Predecessors in the shortest path:", predecessors)
+# Dijkstra with heap
+distances_with_heap, predecessors_with_heap = heap_dijkstra(graph, start_node)
+path_with_heap = reconstruct_path(predecessors_with_heap, start_node, end_node)
+print("Path (with heap):", path_with_heap)
+showweightedpath(graph, path_with_heap)
