@@ -125,7 +125,7 @@ def showweightedgraph(graph):
 
     # Add edges to the graph with weights
     for node in graph:
-        for neighbor, weight in graph[node].items():
+        for weight, neighbor in graph[node]:
             G.add_edge(node, neighbor, weight=weight)
 
     # Define node colors
@@ -155,7 +155,7 @@ def showweightedpath(graph, path):
 
     # Add edges to the graph with weights
     for node in graph:
-        for neighbor, weight in graph[node].items():
+        for weight, neighbor in graph[node]:
             G.add_edge(node, neighbor, weight=weight)
 
     # Define node colors and sizes
