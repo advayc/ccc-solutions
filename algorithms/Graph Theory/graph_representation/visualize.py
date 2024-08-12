@@ -207,4 +207,34 @@ def showweightedpath(graph, path):
 
     ani = animation.FuncAnimation(fig, update, frames=len(path_edges)+1, repeat=False, interval=500)  # Adjust interval for smoothness
 
+    def on_hover(event):
+        if event.inaxes == ax:
+            cont, ind = scatter.contains(event)
+            if cont:
+                # Get the index of the hovered node
+                index = ind['ind'][0]
+                node = list(G.nodes())[index]
+                if node == starting_node:
+                    ax.set_title('Hovering over the starting node')
+                elif node == ending_node:
+                    ax.set_title('Hovering over the ending node')
+                else:
+                    ax.set_title(f'Hovered over node: {node}')
+                fig.canvas.draw_idle()
+            else:
+                ax.set_title('Graph Visualization with Highlighted Path')
+                fig.canvas.draw_idle()
+
+    # Create a scatter plot for hover and click detection
+    scatter = ax.scatter(
+        [pos[node][0] for node in G.nodes()],
+        [pos[node][1] for node in G.nodes()],
+        s=[node_sizes[node] for node in G.nodes()],
+        c=[node_colors[node] for node in G.nodes()],
+        edgecolors=options["edgecolors"],
+        alpha=options["alpha"]
+    )
+
+    fig.canvas.mpl_connect('motion_notify_event', on_hover)
+
     plt.show()

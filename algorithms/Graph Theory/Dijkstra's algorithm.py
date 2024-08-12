@@ -114,7 +114,7 @@ graph = {
 }
 
 start_node = 'A'
-end_node = 'D'
+end_node = 'P'
 
 # Dijkstra without heap
 start_time = time.time()
@@ -125,7 +125,7 @@ execution_time = end_time - start_time
 print(f"Execution time for Dijkstra without heap: {execution_time} seconds \n---------------\n")
 print("Path (no heap):", path_no_heap)
 
-
+start_time, end_time, execution_time = 0,0,0
 # Dijkstra with heap
 start_time = time.time()
 distances_with_heap, predecessors_with_heap = heap_dijkstra(graph, start_node)
