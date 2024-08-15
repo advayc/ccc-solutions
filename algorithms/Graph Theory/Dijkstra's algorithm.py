@@ -15,8 +15,8 @@ def heap_dijkstra(graph, start):
     """
 
     dist = {}
-    for node in graph: # go through the graph and assign each node weight to be infinity
-        dist[node] = float('inf')
+    for node in graph: # go through the graph and assign each node weight to be negative infinity
+        dist[node] = float('-inf')
 
     dist[start] = 0
     prev = {}
@@ -36,7 +36,7 @@ def heap_dijkstra(graph, start):
         for weight, v in graph[u]:
             distance = current_dist + weight
             
-            if distance < dist[v]:
+            if distance > dist[v]:  # check if the new distance is greater than the current distance
                 dist[v] = distance
                 prev[v] = u
                 heapq.heappush(priority_queue, (distance, v))
