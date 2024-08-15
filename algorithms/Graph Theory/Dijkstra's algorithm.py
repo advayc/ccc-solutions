@@ -1,5 +1,5 @@
 import heapq, time
-from graph_representation.visualize import showweightedpath
+from graph_representation.visualize import showweightedpath, showweightedgraph
 
 def heap_dijkstra(graph, start):
     """
@@ -14,9 +14,14 @@ def heap_dijkstra(graph, start):
     - prev (dict): The previous node in the optimal path from the start node for each node.
     """
 
-    dist = {node: float('inf') for node in graph}
+    dist = {}
+    for node in graph: # go through the graph and assign each node weight to be infinity
+        dist[node] = float('inf')
+
     dist[start] = 0
-    prev = {node: None for node in graph}
+    prev = {}
+    for node in graph:
+        prev[node] = None
     priority_queue = [(0, start)]  # (distance, node)
     visited = set()
     
@@ -114,7 +119,7 @@ graph = {
 }
 
 start_node = 'A'
-end_node = 'P'
+end_node = 'N'
 
 # Dijkstra without heap
 start_time = time.time()
@@ -135,4 +140,4 @@ execution_time = end_time - start_time
 print(f"Execution time for Dijkstra with heap: {execution_time} seconds \n---------------\n")
 print("Path (with heap):", path_with_heap)
 
-showweightedpath(graph, path_no_heap)
+showweightedpath(graph, path_with_heap)
