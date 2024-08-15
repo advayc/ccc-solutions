@@ -1,4 +1,7 @@
 # https://dmoj.ca/problem/gfssoc2s4
+
+# i dont know why this doesnt work -> works on first case
+
 import sys
 import heapq
 input = sys.stdin.readline
