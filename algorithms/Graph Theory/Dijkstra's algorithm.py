@@ -1,22 +1,10 @@
 import heapq, time
 from graph_representation.visualize import showweightedpath, showweightedgraph
 
-def heap_dijkstra(graph, start):
-    """
-    Implements Dijkstra's algorithm to find the shortest path from the start node to all other nodes in a weighted graph.
-    
-    Parameters:
-    - graph (dict): Adjacency list where each key is a node, and the value is a list of tuples (weight, destination).
-    - start (str): The starting node for the algorithm.
-
-    Returns:
-    - dist (dict): The shortest distance from the start node to each node.
-    - prev (dict): The previous node in the optimal path from the start node for each node.
-    """
-
+def heap_dijkstra(graph, start, end):
     dist = {}
     for node in graph: # go through the graph and assign each node weight to be negative infinity
-        dist[node] = float('-inf')
+        dist[node] = float('inf')
 
     dist[start] = 0
     prev = {}
@@ -26,22 +14,33 @@ def heap_dijkstra(graph, start):
     visited = set()
     
     while priority_queue:
-        current_dist, u = heapq.heappop(priority_queue)
+        current_dist, current_node = heapq.heappop(priority_queue)
         
-        if u in visited:
+        # If we reached the end node, we can reconstruct and return the path
+        if current_node == end:
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = prev[current_node]
+            path.reverse()  # Reverse the path to get it from start to end
+            return dist[end], path
+        
+        if current_node in visited:
             continue
         
-        visited.add(u)
+        visited.add(current_node)
         
-        for weight, v in graph[u]:
+        for weight, neighbour in graph[current_node]:
             distance = current_dist + weight
             
-            if distance > dist[v]:  # check if the new distance is greater than the current distance
-                dist[v] = distance
-                prev[v] = u
-                heapq.heappush(priority_queue, (distance, v))
+            # Check if the new distance is less than the current known distance
+            if distance < dist[neighbour]:
+                dist[neighbour] = distance
+                prev[neighbour] = current_node
+                heapq.heappush(priority_queue, (distance, neighbour))
     
-    return dist, prev
+    # If the end node is unreachable, return infinity and an empty path
+    return -1, []
 
 def dijkstra_no_heap(graph, start):
     """
@@ -133,7 +132,7 @@ print("Path (no heap):", path_no_heap)
 start_time, end_time, execution_time = 0,0,0
 # Dijkstra with heap
 start_time = time.time()
-distances_with_heap, predecessors_with_heap = heap_dijkstra(graph, start_node)
+distances_with_heap, predecessors_with_heap = heap_dijkstra(graph, start_node, end_node)
 path_with_heap = reconstruct_path(predecessors_with_heap, start_node, end_node)
 end_time = time.time()
 execution_time = end_time - start_time
