@@ -26,15 +26,15 @@ def bfs(graph, starting_node, ending_node):
     count = 0
     visited = set()
     queue = []
-    queue.append((starting_node, [])) # with add every unique traversed node into the queue
+    queue.append((starting_node, 0)) # with add every unique traversed node into the queue
     visited.add(starting_node)
     while queue:
         current_node,count = queue.pop(0)
         if current_node == ending_node:
-            return len(count)
+            return count
         for neighbour in graph[current_node]:
             if neighbour not in visited:
-                queue.append((neighbour, count+[neighbour]))
+                queue.append((neighbour, count+1))
                 visited.add(neighbour)
     return "Not connected"
 
