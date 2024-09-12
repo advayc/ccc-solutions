@@ -1,34 +1,52 @@
+import sys
+input = sys.stdin.readline
 n, m, k = map(int, input().split())
-grid = [list(input()) for _ in range(n)]
-new_grid = [['.' for _ in range(m)] for _ in range(n)]
+graph = [[] for _ in range(n)]
+graph2 = [['.' for _ in range(m)] for _ in range(n)]
 
 for i in range(n):
+    row = input().strip()
     for j in range(m):
-        cur = grid[i][j]
-        if cur == '.':
-            new_grid[i][j] = '.'
+        if row[j] != '.':
+            graph[i].append((j, row[j]))
+            graph2[i][j] = 'Y'
 
-        if cur == 'A':
-            if j + k < m: 
-                scaled = grid[i][j+k]
+for r in range(n):
+    teamA = []
+    teamB = []
 
-                if scaled == 'B':
-                    new_grid[i][j] = 'N'  
-                else:
-                    new_grid[i][j] = 'Y'  
-            else:
-                new_grid[i][j] = 'Y'
+    for player in graph[r]:
+        if player[1] == 'A':
+            teamA.append(player[0])
+        else:
+            teamB.append(player[0])
 
-        if cur == 'B':
-            if j - k >= 0:  
-                scaled = grid[i][j-k]
+    teamA.sort()
+    teamB.sort()
 
-                if scaled == 'A':
-                    new_grid[i][j] = 'N'  
-                else:
-                    new_grid[i][j] = 'Y' 
-            else:
-                new_grid[i][j] = 'Y'  
+    i, j = 0, 0
 
-for row in new_grid:
+    # Two-pointer technique to find the closest blockers for team A
+    while i < len(teamA) and j < len(teamB):
+        if teamB[j] > teamA[i] and teamB[j] <= teamA[i] + k:
+            graph2[r][teamA[i]] = 'N'
+            i += 1  # Move to the next A
+        elif teamB[j] <= teamA[i]:
+            j += 1  # Move to the next B
+        else:
+            i += 1  # Move to the next A
+
+    i, j = 0, 0
+
+    # Two-pointer technique to find the closest blockers for team B
+    while i < len(teamA) and j < len(teamB):
+        if teamA[i] >= teamB[j] - k and teamA[i] < teamB[j]:
+            graph2[r][teamB[j]] = 'N'
+            j += 1  # Move to the next B
+        elif teamA[i] < teamB[j]:
+            i += 1  # Move to the next A
+        else:
+            j += 1  # Move to the next B
+
+for row in graph2:
     print(''.join(row))
