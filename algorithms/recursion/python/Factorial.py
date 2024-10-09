@@ -9,7 +9,6 @@ def Factorial(n: int):
     else:
         return n * Factorial(n-1)# factorial does n * n-1
                         # requires factorial function call so it does infinitly till base case is true
-    
 n = int(input('factorial of: '))
 print(Factorial(n))
 print(f"Execution time: {execution_time} seconds")
