@@ -1,8 +1,10 @@
-values = {}
-while True:
+city, temp = map(str, input().split())
+temp = int(temp)
+values = {temp: city}
+while city != 'Waterloo':
     city, temp = map(str, input().split())
     temp=int(temp)
-    if city == 'Waterloo':
-        break
-    values[city] = temp
-    print(values)
+    values[temp] = city
+
+m = sorted(values.keys())[0]
+print(values[m])
