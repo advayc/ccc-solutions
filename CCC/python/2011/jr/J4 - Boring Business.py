@@ -43,4 +43,3 @@ while status != 'DANGER':
             passed.append([current_X, current_Y])
 
     print(dx, dy, status)
-
